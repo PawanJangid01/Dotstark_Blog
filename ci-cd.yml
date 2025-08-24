@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_PATH: Blog_pepiline.csproj     # your .csproj file name
+  PROJECT_PATH: Myblog.csproj     # your .csproj file name
   ARTIFACT_NAME: drop
   PUBLISH_DIR: publish
   IIS_SITE_PATH: C:\inetpub\wwwroot\Blog_pepiline
