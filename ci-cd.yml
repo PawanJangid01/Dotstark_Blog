@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     name: Build & Test
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
 
     steps:
       - name: Checkout
@@ -42,17 +42,17 @@ jobs:
       - name: Publish
         run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ${{ env.PUBLISH_DIR }}
 
-      - name: Zip artifact
-        run: |
-          cd ${{ env.PUBLISH_DIR }}
-          zip -r ../${{ env.ARTIFACT_NAME }}.zip .
+      # - name: Zip artifact
+      #   run: |
+      #     cd ${{ env.PUBLISH_DIR }}
+      #     zip -r ../${{ env.ARTIFACT_NAME }}.zip .
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ARTIFACT_NAME }}.zip
-          if-no-files-found: error
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.ARTIFACT_NAME }}
+      #     path: ${{ env.ARTIFACT_NAME }}.zip
+      #     if-no-files-found: error
 
   deploy:
     name: Deploy to IIS (self-hosted)
@@ -60,20 +60,20 @@ jobs:
     runs-on: [ self-hosted, windows, iis, prod ]
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: C:\deploy\incoming
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: ${{ env.ARTIFACT_NAME }}
+      #     path: C:\deploy\incoming
 
-      - name: Unzip
-        shell: pwsh
-        run: |
-          $zip = "C:\deploy\incoming\${{ env.ARTIFACT_NAME }}.zip"
-          $release = "C:\deploy\staging\${{ github.run_number }}"
-          New-Item -ItemType Directory -Force -Path $release | Out-Null
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-          [System.IO.Compression.ZipFile]::ExtractToDirectory($zip, $release, $true)
+      # - name: Unzip
+      #   shell: pwsh
+      #   run: |
+      #     $zip = "C:\deploy\incoming\${{ env.ARTIFACT_NAME }}.zip"
+      #     $release = "C:\deploy\staging\${{ github.run_number }}"
+      #     New-Item -ItemType Directory -Force -Path $release | Out-Null
+      #     Add-Type -AssemblyName System.IO.Compression.FileSystem
+      #     [System.IO.Compression.ZipFile]::ExtractToDirectory($zip, $release, $true)
 
       - name: Deploy to IIS
         shell: pwsh
