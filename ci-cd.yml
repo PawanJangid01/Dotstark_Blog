@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     name: Build & Test
-    runs-on: [self-hosted, windows]
+    runs-on: [self-hosted, windows, X64]
 
     steps:
       - name: Checkout
