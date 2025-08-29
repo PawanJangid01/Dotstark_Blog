@@ -57,7 +57,7 @@ jobs:
   deploy:
     name: Deploy to IIS (self-hosted)
     needs: build
-    runs-on: [ self-hosted, windows, iis, prod ]
+    runs-on: [ self-hosted, windows, X64 ]
 
     steps:
       # - name: Download artifact
